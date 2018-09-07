@@ -1,15 +1,9 @@
-interface IChangeNum{
-    type: 'CHANGE_NUM',
-    value: number
-}
+import {ChangeNumAction} from './type'
 
-export function changeNum(value:number):IChangeNum {
+export function changeNumAction(value:number):ChangeNumAction {
     return {
-        type:'CHANGE_NUM',
-        value
+        type:'@@inner/CHANGE_NUM',
+        payload: value
     }
 }
-
-export type actionType = IChangeNum
-
 

@@ -1,26 +1,14 @@
-interface IChangeName {
-    type: 'CHANGE_NAME',
-    value: string
-}
-
-interface IChangeTime {
-    type: 'CHANGE_TIME',
-    value: Date
-}
-
-export function changeName(name: string): IChangeName {
+import {ChangeNameAction, ChangeTimeAction} from './type'
+export function changeNameAction(name: string): ChangeNameAction {
     return {
-        type: 'CHANGE_NAME',
-        value: name
+        type: '@@index/CHANGE_NAME',
+        payload: name
     }
 }
 
-export function changeTime(time: Date): IChangeTime {
+export function changeTimeAction(time: Date): ChangeTimeAction {
     return {
-        type: 'CHANGE_TIME',
-        value: time
+        type: '@@index/CHANGE_TIME',
+        payload: time
     }
 }
-
-
-export type actionTypes = IChangeName | IChangeTime

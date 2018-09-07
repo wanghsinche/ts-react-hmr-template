@@ -1,76 +1,76 @@
 import * as React from 'react';
-import {IState} from '../../business/index/reducer';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { AppState } from '../../business';
 
+import { IndexState, ChangeNameAction, ChangeTimeAction } from '../../business/index/type';
 import * as actions from '../../business/index/action';
 
-import { connect } from 'react-redux';
-import {Dispatch} from 'redux';
-import {IStore} from '../../business/reducer';
-
-interface IActions {
+interface IndexProps {
     changeName: (name: string) => void
     changeDate: (time: Date) => void
 }
 
-interface IProps extends IState, IActions {}
+type AllProps = IndexProps & IndexState
 
-class Index extends React.Component<IProps, {tempName: string}>{
-    constructor(props: IProps) {
+type IndexAction = ChangeNameAction | ChangeTimeAction
+
+class Index extends React.Component<AllProps, { tempName: string }>{
+    constructor(props: AllProps) {
         super(props);
         this.state = {
             tempName: ''
         }
     }
-    
-    public componentDidMount(){
+
+    public componentDidMount() {
         this.setState({
             tempName: this.props.name
         })
     }
 
     public clickHandle = (e: React.MouseEvent) => {
-       const oriTime = this.props.time
-       const newTime = new Date()
-       newTime.setUTCDate(oriTime.getUTCDate() + 1)
-       this.props.changeDate(newTime)
+        const oriTime = this.props.time
+        const newTime = new Date()
+        newTime.setUTCDate(oriTime.getUTCDate() + 1)
+        this.props.changeDate(newTime)
     }
 
     public inputHandle = (e: React.ChangeEvent) => {
         const value = (e.target as HTMLInputElement).value;
-        this.props.changeName(value)
         this.setState({
             tempName: value
         })
-
+        this.props.changeName(value)
     }
 
     public render() {
-        const {clickHandle, inputHandle} = this
-        const {tempName} = this.state
-        const {time,name} = this.props
+        const { clickHandle, inputHandle } = this
+        const { tempName } = this.state
+        const { time, name } = this.props
         const date = time.toUTCString()
         return (
             <div>
                 <h2>Index</h2>
                 <div>{date}</div>
                 <button onClick={clickHandle}>+1 day</button>
-                <input type="text" onChange={inputHandle} placeholder="input name" value={tempName}/>
+                <input type="text" onChange={inputHandle} placeholder="input name" value={tempName} />
                 <div>{name}</div>
             </div>
         );
     }
 }
 
-function mapStateToProps(state: IStore):IState{
+function mapStateToProps(state: AppState): IndexState {
     return state.index
 }
-function mapDispatchToProps(dispatch: Dispatch):IActions{
+function mapDispatchToProps(dispatch: Dispatch<IndexAction>): IndexProps {
     return {
-        changeDate:(time:Date):void=>{
-            dispatch(actions.changeTime(time))
+        changeDate: (time: Date): void => {
+            dispatch(actions.changeTimeAction(time))
         },
-        changeName:(name:string):void=>{
-            dispatch(actions.changeName(name))
+        changeName: (name: string): void => {
+            dispatch(actions.changeNameAction(name))
         }
     }
 }

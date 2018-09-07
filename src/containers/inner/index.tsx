@@ -1,18 +1,19 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {Dispatch} from 'redux';
-import {changeNum} from '../../business/inner/action';
-import {IState} from '../../business/inner/reducer';
-import {IStore} from '../../business/reducer';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
+import { AppState } from '../../business';
 
-interface IAction {
+import {changeNumAction} from '../../business/inner/action';
+import {ChangeNumAction, InnerState} from '../../business/inner/type';
+
+interface InnerProps {
     onAdd:()=>void
 } 
-interface IProps extends IAction, IState{
 
-}
+type AllProps = InnerProps & InnerState
+type InnerAction = ChangeNumAction
 
-class Inner extends React.Component<IProps>{
+class Inner extends React.Component<AllProps>{
     public render(){
         const {num} = this.props
         return (
@@ -24,12 +25,12 @@ class Inner extends React.Component<IProps>{
     }
 }
 
-function mapDispatchToProps(dispatch:Dispatch):IAction{
+function mapDispatchToProps(dispatch:Dispatch<InnerAction>):InnerProps{
     return {
         onAdd:()=>{
-            dispatch(changeNum(1))
+            dispatch(changeNumAction(1))
         }
     }
 }
 
-export default connect((state: IStore):IState=>state.inner, mapDispatchToProps)(Inner);
+export default connect((state: AppState):InnerState=>state.inner, mapDispatchToProps)(Inner);

@@ -1,16 +1,14 @@
-import {actionType} from './action'
+import {ChangeNumAction, InnerState} from './type'
 
-const initState = {
+const initState:InnerState = {
     num: 0
 }
 
-export type IState = typeof initState
-
-export default function reducer(state: IState=initState, action:actionType):IState{
+export default function reducer(state: InnerState=initState, action:ChangeNumAction):InnerState{
     switch(action.type){
-        case 'CHANGE_NUM':
+        case '@@inner/CHANGE_NUM':
         return Object.assign({}, state, {
-            num: state.num + action.value
+            num: state.num + action.payload
         })
         default:
         return state

@@ -1,22 +1,21 @@
-import { actionTypes } from './action';
+import { ChangeNameAction, ChangeTimeAction, IndexState } from './type';
 
-const defaultState = {
+const defaultState:IndexState = {
     name: '',
     time: new Date()
 }
 
-export type IState = typeof defaultState
+type ConbinedAction = ChangeNameAction|ChangeTimeAction
 
-
-export default function reducer(state: IState = defaultState, action: actionTypes): IState {
+export default function reducer(state: IndexState = defaultState, action: ConbinedAction): IndexState {
     switch (action.type) {
-        case 'CHANGE_NAME':
+        case '@@index/CHANGE_NAME':
             return Object.assign({}, state, {
-                name: action.value
+                name: action.payload
             })
-        case 'CHANGE_TIME':
+        case '@@index/CHANGE_TIME':
             return Object.assign({}, state, {
-                time: action.value
+                time: action.payload
             })
         default:
             return state

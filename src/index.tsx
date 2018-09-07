@@ -7,14 +7,14 @@ import registerServiceWorker from './registerServiceWorker';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 
-import combinedReducer from './business/reducer';
+import {appReducer, AppState, AppAction} from './business';
 
 declare global {
   interface Window { __REDUX_DEVTOOLS_EXTENSION__: any; }
 }
 
-const appStore = createStore(
-  combinedReducer, /* preloadedState, */
+const appStore = createStore<AppState, AppAction, {}, {}>(
+  appReducer, /* preloadedState, */
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 
