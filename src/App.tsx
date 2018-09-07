@@ -4,7 +4,8 @@ import {
   BrowserRouter as Router,
   Link,
   Redirect,
-  Route
+  Route,
+  Switch
 } from 'react-router-dom';
 import Index from './containers/index';
 import Inner from './containers/inner';
@@ -14,7 +15,7 @@ import './App.css';
 import logo from './logo.svg';
 
 class App extends React.Component {
-  public redirectRoute(){
+  public redirectRoute() {
     return (<Redirect to="/index" />);
   }
   public render() {
@@ -33,9 +34,11 @@ class App extends React.Component {
             <Link to="/inner">Inner</Link>
           </div>
           <div className="App-view">
-            <Route path="/" extact="true" render={this.redirectRoute} />
-            <Route path="/index" component={Index} extact="true" />
-            <Route path="/inner" component={Inner} extact="true" />
+            <Switch>
+              <Route path="/index" component={Index} exact={true} />
+              <Route path="/inner" component={Inner} exact={true} />
+              <Redirect from="/" to="/index" exact={true} />
+            </Switch>
           </div>
         </div>
       </Router>
