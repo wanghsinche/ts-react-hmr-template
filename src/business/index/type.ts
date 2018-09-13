@@ -1,17 +1,27 @@
 import {Action} from 'redux';
 
 export interface IndexState{
-    name: string
-    time: Date
+    bson: string
+    data: any[]
+    summary: ''
+    composite1: any[]
+    composite2: any[]
 }
 
-export interface ChangeNameAction extends Action{
-    type:'@@index/CHANGE_NAME',
+export interface UpdateBson extends Action{
+    type:'@@index/UPDATE_BSON'
     payload: string
 }
 
-export interface ChangeTimeAction extends Action{
-    type: '@@index/CHANGE_TIME',
-    payload: Date
+export interface UpdateData extends Action{
+    type:'@@index/UPDATE_DATA'
+    payload: any[]
 }
 
+export interface UpdateComposite extends Action{
+    type:'@@index/UPDATE_COMPOSITE'
+    payload: {
+        composite1:any[]
+        composite2:any[]
+    }
+}

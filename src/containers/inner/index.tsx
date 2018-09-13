@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { AppState } from '../../business';
+import { AppState } from '../../business/type';
 
 import {changeNumAction} from '../../business/inner/action';
 import {ChangeNumAction, InnerState} from '../../business/inner/type';

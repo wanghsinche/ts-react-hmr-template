@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+<title>登录回调页面</title>
+<style>
+#wrap {
+    padding: 20px 0;
+    background: none repeat scroll 0 0 #F7F7F7;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    max-width: 360px;
+    margin: 80px auto;
+}
+#avatar {
+    background-color: #DFDFDF;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    text-align: center;
+}
+#avatar svg {
+    width: 64px;
+    height: 64px;
+    padding-top: 16px;
+}
+#message {
+    text-align: center;
+    color: #31708f;
+    font-size: 14px;
+}
+</style>
+</head>
+<body>
+    <div id="wrap">
+        <div id="avatar">
+            <svg width="1792" height="1792" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1600 1405q0 120-73 189.5t-194 69.5h-874q-121 0-194-69.5t-73-189.5q0-53 3.5-103.5t14-109 26.5-108.5 43-97.5 62-81 85.5-53.5 111.5-20q9 0 42 21.5t74.5 48 108 48 133.5 21.5 133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5t-271.5 112.5-271.5-112.5-112.5-271.5 112.5-271.5 271.5-112.5 271.5 112.5 112.5 271.5z" fill="#fff"/></svg>
+        </div>
+        <div id="message">正在确认登录授权</div>
+    </div>
+<script src="https://cdn.bootcss.com/fetch/2.0.4/fetch.min.js"></script>
+<script>
+(function() {
+    var args;
+    var host = location.host;
+    if (host === 'localhost' || host.startsWith('localhost:')) {
+        args = location.search;
+    } else {
+        args = location.hash.replace('#', '?');
+    }
+
+    var apiUrl = '/mock/auth/login' + args;
+    fetch(apiUrl, {
+        method: 'GET',
+        credentials: 'include',
+    }).then(function() {
+        window.close();
+    }, function() {
+        window.close();
+    });
+})();
+</script>
+</body>
+</html>

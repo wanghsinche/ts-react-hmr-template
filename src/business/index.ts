@@ -1,19 +1,9 @@
-import { combineReducers, Dispatch, Reducer } from 'redux'
+import { combineReducers, Reducer } from 'redux'
 import index from './index/reducer'
 import inner from './inner/reducer'
+import general from './general/reducer'
 
-import { IndexState, ChangeNameAction, ChangeTimeAction } from './index/type'
-import { InnerState, ChangeNumAction } from './inner/type'
+import {AppState} from './type'
 
-export interface AppState {
-    index: IndexState,
-    inner: InnerState
-}
+export const appReducer: Reducer<AppState> = combineReducers<AppState>({ index, inner, general })
 
-export type AppAction = ChangeNameAction|ChangeTimeAction|ChangeNumAction
-
-export const appReducer: Reducer<AppState> = combineReducers<AppState>({ index, inner })
-
-export interface ConnectedProps<T extends AppAction>{
-    dispatch: Dispatch<T>
-}
