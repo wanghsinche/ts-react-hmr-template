@@ -3,8 +3,8 @@ import * as React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { AppState } from '../../business/type';
-import { getData, getComposite } from '../../business//service';
-import { SingleData } from '../../lib/single';
+import { getData, getComposite } from '../../business/service';
+import { Analysis } from '../../lib/analysis';
 
 
 // @antv/g2
@@ -34,13 +34,13 @@ class Index extends React.Component<AllProps, { summary: string }>{
     public chart3: G2.Chart | undefined = undefined
     public chart4: G2.Chart | undefined = undefined
     public pie: G2.Chart | undefined = undefined
-    public extractedData: SingleData<RawEleType> = new SingleData({
+    public extractedData: Analysis<RawEleType> = new Analysis({
         circle: 12, everyCircle: 300000
     })
-    public composite1Data: SingleData<RawEleType> = new SingleData({
+    public composite1Data: Analysis<RawEleType> = new Analysis({
         circle: 1, everyCircle: 24 * 60 * 60 * 1000
     })
-    public composite2Data: SingleData<RawEleType> = new SingleData({
+    public composite2Data: Analysis<RawEleType> = new Analysis({
         circle: 1, everyCircle: 24 * 60 * 60 * 1000
     })
     constructor(props: AllProps) {
@@ -66,12 +66,12 @@ class Index extends React.Component<AllProps, { summary: string }>{
                     'mm_utype.2': '手机',
                     'mm_utype.3': '陌陌号'
                 })
-                // .extract({
-                //     'mm_utype': ['无法获取，游客']
-                // })
-                .extract()
+                .extract({
+                    'OS': ['iOS', 'Android']
+                })
+                // .extract()
             this.setState({
-                summary: SingleData.summary(finalData).reduce((am, cm) => am + '\n' + JSON.stringify(cm), '')
+                summary: Analysis.summary(finalData).reduce((am, cm) => am + '\n' + JSON.stringify(cm), '')
             })
             this.createChart(finalData, (this.chartContainer as HTMLDivElement), this.chart)
 
@@ -186,26 +186,22 @@ class Index extends React.Component<AllProps, { summary: string }>{
             }
         })
         this.chart4.schema().position('time*range').shape('box').tooltip('time*low*q1*median*q3*high').color('type')
-        .style({
-            stroke: '#545454',
-            fill: '#1890FF',
-            fillOpacity: 0.3
-        });
+        
         this.chart4.render();
     }
 
     public refleshComposite = () => {
         const c1 = this.composite1Data.setRawData(this.props.composite1).setConfig({ circle: 3 }).extract({ 'Level': ['2', '1'], 'OS': ['Android', 'iOS'] })
         const c2 = this.composite2Data.setRawData(this.props.composite2).setConfig({ circle: 3 }).extract({ 'Level': ['2', '1'], 'OS': ['Android', 'iOS'] })
-        const c1c2 = SingleData.doOperate(c1, c2, SingleData.divide)
+        const c1c2 = Analysis.doOperate(c1, c2, Analysis.divide)
         this.createChart(c1c2, this.pieContainer as HTMLDivElement, this.chart2)
     }
 
     public refleshIntegrate = () => {
         const c1 = this.composite1Data.setRawData(this.props.composite1).setConfig({ circle: 3 }).extract({ 'Level': ['2', '1'], 'OS': ['Android', 'iOS'] })
         const c2 = this.composite2Data.setRawData(this.props.composite2).setConfig({ circle: 3 }).extract({ 'Level': ['2', '1'], 'OS': ['Android', 'iOS'] })
-        const c1c2 = SingleData.doOperate(c1, c2, SingleData.divide)
-        this.createChart(SingleData.integrate(c1c2), document.querySelector('#integrate-div') as HTMLDivElement, this.chart3)
+        const c1c2 = Analysis.doOperate(c1, c2, Analysis.divide)
+        this.createChart(Analysis.integrate(c1c2), document.querySelector('#integrate-div') as HTMLDivElement, this.chart3)
     }
 
     public render() {

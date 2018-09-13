@@ -2,7 +2,7 @@ import * as _ from 'lodash'
 import { AntvEleType, FieldType, RawEleType, RegroupMapType } from './type'
 import Base from './base'
 import { rawToAntv, combineCircle, combineBox, createMatcher, paddingZero, createRegroupFunc} from './helper'
-export class SingleData<T extends RawEleType> extends Base<T>{
+export class Analysis<T extends RawEleType> extends Base<T>{
     private data: T[] = []
     private circle: number
     private everyCircle: number
