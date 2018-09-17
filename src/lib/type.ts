@@ -4,7 +4,7 @@ export type MessageType = 'OK' | 'FAILED'
 /**
  * 筛选列表类型
  */
-export interface FieldType {
+export interface FilterListType {
     [key: string]: string[]
 }
 
@@ -65,5 +65,6 @@ export const ErrorType = {
     NoSameType: '维度不同',
     ZeroDivisor: '除数为零',
     DifferentTime: '时间戳不同',
-    EmptyArray: '不支持空数组'
+    EmptyArray: '不支持空数组',
+    dirtyData: '数据尚未初始处理'
 }

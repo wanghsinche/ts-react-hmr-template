@@ -1,5 +1,5 @@
 import { IndexState, UpdateBson } from './index/type'
-import { InnerState, ChangeNumAction } from './inner/type'
+import { InnerState, UpdateComposite } from './inner/type'
 import { GeneralState, LoginAction} from './general/type'
 import { Dispatch } from 'redux'
 
@@ -10,7 +10,7 @@ export interface AppState {
 }
 
 
-export type AppAction = ChangeNumAction | UpdateBson | LoginAction
+export type AppAction = UpdateComposite | UpdateBson | LoginAction
 
 export interface ConnectedProps<T extends AppAction> {
     dispatch: Dispatch<T>

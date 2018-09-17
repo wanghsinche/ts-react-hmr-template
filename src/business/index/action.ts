@@ -1,4 +1,4 @@
-import { UpdateBson, UpdateData, UpdateComposite } from './type'
+import { UpdateBson, UpdateData } from './type'
 export function updateBsonAction(data: string): UpdateBson {
     return {
         type: '@@index/UPDATE_BSON',
@@ -11,12 +11,4 @@ export function updateDataAction(data: any[]): UpdateData {
         payload: data
     }
 }
-export function updateCompositeAction(data: {
-    composite1: any[],
-    composite2: any[]
-}): UpdateComposite {
-    return {
-        type: '@@index/UPDATE_COMPOSITE',
-        payload: data
-    }
-}
+

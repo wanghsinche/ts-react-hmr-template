@@ -1,14 +1,11 @@
-import { UpdateBson, UpdateData, UpdateComposite, IndexState } from './type';
+import { UpdateBson, UpdateData, IndexState } from './type';
 
 const defaultState:IndexState = {
     bson: '',
-    data: [],
-    summary: '',
-    composite1: [],
-    composite2: []
+    data: []
 }
 
-type ConbinedAction = UpdateBson| UpdateData | UpdateComposite
+type ConbinedAction = UpdateBson| UpdateData 
 
 export default function reducer(state: IndexState = defaultState, action: ConbinedAction): IndexState {
     switch (action.type) {
@@ -20,8 +17,6 @@ export default function reducer(state: IndexState = defaultState, action: Conbin
            return Object.assign({}, state, {
                data: action.payload
            })
-        case '@@index/UPDATE_COMPOSITE':
-           return Object.assign({}, state, action.payload)
         default:
             return state
     }

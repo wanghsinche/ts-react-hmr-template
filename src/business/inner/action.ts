@@ -1,9 +1,11 @@
-import {ChangeNumAction} from './type'
+import { UpdateComposite } from './type'
 
-export function changeNumAction(value:number):ChangeNumAction {
+export function updateCompositeAction(data: {
+    composite1: any[],
+    composite2: any[]
+}): UpdateComposite {
     return {
-        type:'@@inner/CHANGE_NUM',
-        payload: value
+        type: '@@index/UPDATE_COMPOSITE',
+        payload: data
     }
 }
-

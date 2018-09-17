@@ -1,10 +1,15 @@
-import { Action } from 'redux'
+import {Action} from 'redux';
 
 export interface InnerState{
-    num: number
+    composite1: any[]
+    composite2: any[]
 }
 
-export interface ChangeNumAction extends Action{
-    type: '@@inner/CHANGE_NUM'
-    payload: number
+
+export interface UpdateComposite extends Action{
+    type:'@@index/UPDATE_COMPOSITE'
+    payload: {
+        composite1:any[]
+        composite2:any[]
+    }
 }

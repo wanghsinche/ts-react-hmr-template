@@ -1,4 +1,4 @@
-import { transformStatus, MessageType, FieldType, RawEleType, AntvEleType, SummaryType, RegroupFunc, RegroupMapType, ErrorType } from './type'
+import { transformStatus, MessageType, FilterListType, RawEleType, AntvEleType, SummaryType, RegroupFunc, RegroupMapType, ErrorType } from './type'
 import { cartesianProductOf, devi, integrate, iqr } from './math'
 import * as _ from 'lodash'
 /**
@@ -47,7 +47,7 @@ export function createRegroupFunc(map: RegroupMapType): RegroupFunc {
  * @param field 筛选列表
  * @param mapFunc 维度映射函数
  */
-export function rawToAntv(ele: RawEleType, field?: FieldType, mapFunc?: (key: string, type: string) => string): AntvEleType {
+export function rawToAntv(ele: RawEleType, field?: FilterListType, mapFunc?: (key: string, type: string) => string): AntvEleType {
     // 把筛选指标合并，作为type
     let type = ''
     if (field) {
@@ -76,7 +76,7 @@ export function rawToAntv(ele: RawEleType, field?: FieldType, mapFunc?: (key: st
  * 创建筛选器
  * @param field 
  */
-export function createMatcher(field: FieldType) {
+export function createMatcher(field: FilterListType) {
     const ii = _.keys(field).map(k => field[k])
     const filterList = cartesianProductOf(...ii).map((it: string[]) => it.join('&'))
     return (ele: AntvEleType) => {
@@ -90,7 +90,7 @@ export function createMatcher(field: FieldType) {
  * 所以这里直接填充没问题
  * @param oriData 
  */
-export function paddingZero(oriData: AntvEleType[], field?: FieldType): AntvEleType[] {
+export function paddingZero(oriData: AntvEleType[], field?: FilterListType): AntvEleType[] {
     if (oriData.length < 1) {
         return []
     }
@@ -122,7 +122,11 @@ export function paddingZero(oriData: AntvEleType[], field?: FieldType): AntvEleT
         }))
         // 把原来没超出的也塞进去
         while (oriIndex < oriData.length && oriData[oriIndex].c <= current) {
-            zeroList.push(oriData[oriIndex])
+            zeroList.push({
+                c: oriData[oriIndex].c,
+                v: oriData[oriIndex].v,
+                type: oriData[oriIndex].type
+            })
             oriIndex++
         }
         current++
@@ -150,11 +154,16 @@ export function combineCircle(data: AntvEleType[], circle: number = 1, everyCirc
     data.forEach(ele => {
         tempTime = Math.floor((ele.c - startTime) / circle)
         tempKey = tempTime + '|' + ele.type
-        // 再把时间弄成时间戳
-        ele.time = (startTime + tempTime * circle) * everyCircle
+        
         tempEle = map.get(tempKey)
         if (!tempEle) {
-            map.set(tempKey, ele)
+            tempEle = {
+                c: ele.c,
+                v: ele.v,
+                time: (startTime + tempTime * circle) * everyCircle, // 再把时间弄成时间戳
+                type: ele.type
+            }
+            map.set(tempKey, tempEle)
         }
         else {
             tempEle.v += ele.v
@@ -183,19 +192,20 @@ export function combineBox(data: AntvEleType[], circle: number = 1, everyCircle:
     data.forEach(ele => {
         tempTime = Math.floor((ele.c - startTime) / circle)
         tempKey = tempTime + '|' + ele.type
-        // 再把时间弄成时间戳
-        ele.time = (startTime + tempTime * circle) * everyCircle
         tempEle = map.get(tempKey)
 
         if (!tempEle) {
-            tempEle = ele
-            tempEle.vls = []
+            tempEle = {
+                v: ele.v,
+                c: ele.c,
+                vls: [],
+                time: (startTime + tempTime * circle) * everyCircle, // 再把时间弄成时间戳
+                type: ele.type
+            }
             map.set(tempKey, tempEle)
         }
         // 既然是引用关系
         tempEle.vls.push(ele.v)
-
-    
     })
     return Array.from(map.values()).map(ele => {
         const p = iqr(ele.vls) || { low: undefined, q1: undefined, median: undefined, q3: undefined, high: undefined }

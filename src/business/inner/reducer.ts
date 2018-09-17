@@ -1,16 +1,17 @@
-import {ChangeNumAction, InnerState} from './type'
+import { UpdateComposite, InnerState } from './type';
 
-const initState:InnerState = {
-    num: 0
+const defaultState:InnerState = {
+    composite1: [],
+    composite2: []
 }
 
-export default function reducer(state: InnerState=initState, action:ChangeNumAction):InnerState{
-    switch(action.type){
-        case '@@inner/CHANGE_NUM':
-        return Object.assign({}, state, {
-            num: state.num + action.payload
-        })
+type ConbinedAction = UpdateComposite
+
+export default function reducer(state: InnerState = defaultState, action: ConbinedAction): InnerState {
+    switch (action.type) {
+        case '@@index/UPDATE_COMPOSITE':
+           return Object.assign({}, state, action.payload)
         default:
-        return state
+            return state
     }
 }
